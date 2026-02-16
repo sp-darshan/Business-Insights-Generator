@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+pandas
+numpy
+statsmodels
+pydantic
+python-multipart
+torch
