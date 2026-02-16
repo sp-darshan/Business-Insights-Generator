@@ -3,7 +3,7 @@ from statsmodels.tsa.arima.model import ARIMA
 
 def forecast_revenue(monthly_series, steps=3):
 
-    model = ARIMA(monthly_series, order=(2, 1, 2))
+    model = ARIMA(monthly_series, order=(1, 1, 1))
     model_fit = model.fit()
 
     forecast = model_fit.forecast(steps=steps)

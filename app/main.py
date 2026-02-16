@@ -4,6 +4,8 @@ from app.kpi_engine import calculate_kpis
 from app.arima_model import forecast_revenue
 from app.insight_engine import generate_summary
 from app.autoencoder import detect_anomalies
+from app.vae import generate_scenarios
+
 
 app = FastAPI()
 
@@ -19,12 +21,17 @@ def generate_insights():
     forecast = forecast_revenue(monthly_revenue)
 
     summary = generate_summary(kpis, forecast)
+
     daily_revenue = get_daily_revenue(df)
     risk_analysis = detect_anomalies(daily_revenue)
+
+    scenarios = generate_scenarios(monthly_revenue)
+
 
     return {
         "kpis": kpis,
         "forecast": forecast,
         "insights": summary,
-        "risk_analysis": risk_analysis
+        "risk_analysis": risk_analysis,
+        "scenarios": scenarios
     }
