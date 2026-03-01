@@ -9,6 +9,8 @@ from app.gan_model import generate_synthetic_data
 from app.monte_carlo import monte_carlo_simulation
 from fastapi import Body
 from app.simulation_engine import run_what_if_analysis
+from app.health_score import compute_health_score
+from app.decision_engine import generate_recommendations
 
 app = FastAPI()
 
@@ -28,6 +30,19 @@ def generate_insights():
 
     daily_revenue = get_daily_revenue(df)
     risk_analysis = detect_anomalies(daily_revenue)
+    health_score = compute_health_score(
+        forecast,
+        risk_analysis,
+        monte_carlo,
+        kpis
+    )
+
+    recommendations = generate_recommendations(
+        forecast,
+        risk_analysis,
+        monte_carlo,
+        health_score
+    )
 
     scenarios = generate_scenarios(monthly_revenue)
     synthetic_data = generate_synthetic_data(monthly_revenue)
@@ -39,9 +54,11 @@ def generate_insights():
         "scenarios": scenarios,
         "synthetic_data": synthetic_data,
         "monte_carlo": monte_carlo,
+        "health_score": health_score,
+        "recommendations": recommendations,
         "insights": summary,
         "meta": {
-            "model": "Hybrid GenAI Business Engine v1.0"
+            "model": "Hybrid GenAI Business Engine v4.0"
         }
     }
 

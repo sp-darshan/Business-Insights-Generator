@@ -2,7 +2,7 @@ def generate_summary(kpis, forecast):
 
     summary_points = []
 
-    # Revenue health
+    # Revenue trend
     if forecast["trend"] == "increasing":
         summary_points.append("Revenue is showing an upward growth trend.")
     else:
@@ -19,16 +19,6 @@ def generate_summary(kpis, forecast):
         f"Major revenue contribution comes from {kpis['top_country']}."
     )
 
-    # Business health score (simple logic)
-    score = 70
-    if forecast["trend"] == "increasing":
-        score += 10
-    if kpis["unique_customers"] > 3000:
-        score += 10
-
-    score = min(score, 100)
-
     return {
-        "summary": " ".join(summary_points),
-        "business_health_score": score
+        "summary": " ".join(summary_points)
     }
