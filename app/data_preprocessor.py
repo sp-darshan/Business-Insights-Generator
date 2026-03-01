@@ -20,7 +20,11 @@ def load_and_clean_data(file_path: str):
 
 
 def get_monthly_revenue(df):
-    monthly_revenue = df.resample("ME", on="InvoiceDate")["TotalPrice"].sum()
+    monthly_revenue = (
+        df.resample("ME", on="InvoiceDate")["TotalPrice"]
+        .sum()
+        .sort_index()
+    )
 
     return monthly_revenue
 

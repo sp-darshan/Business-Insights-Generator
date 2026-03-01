@@ -70,5 +70,7 @@ def detect_anomalies(daily_series):
 
     return {
         "anomaly_days": anomaly_dates,
-        "risk_level": "high" if len(anomaly_dates) > 5 else "medium" if len(anomaly_dates) > 0 else "low"
+        "anomaly_count": len(anomaly_dates),
+        "risk_level": "high" if len(anomaly_dates) > 5 else "medium" if len(anomaly_dates) > 0 else "low",
+        "threshold": float(threshold)
     }
