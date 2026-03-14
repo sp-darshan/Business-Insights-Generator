@@ -6,3 +6,13 @@ statsmodels
 pydantic
 python-multipart
 torch
+transformers
+
+# Frontend
+streamlit>=1.28.0
+requests>=2.31.0
+matplotlib>=3.7.0
+
+# Additional utilities
+plotly>=5.17.0
+scikit-learn>=1.3.0

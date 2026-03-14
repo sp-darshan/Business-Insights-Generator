@@ -2,12 +2,12 @@ import torch
 import torch.nn as nn
 import numpy as np
 from sklearn.preprocessing import MinMaxScaler
-
+import matplotlib.pyplot as plt
 
 class AutoEncoder(nn.Module):
     def __init__(self, input_dim):
         super(AutoEncoder, self).__init__()
-
+        
         self.encoder = nn.Sequential(
             nn.Linear(input_dim, 8),
             nn.ReLU(),
@@ -63,6 +63,12 @@ def detect_anomalies(daily_series):
 
     # Threshold (mean + 2 std)
     threshold = reconstruction_error.mean() + 2 * reconstruction_error.std()
+    plt.plot(reconstruction_error)
+    plt.title('Reconstruction error')
+    plt.show()
+    # plt.axhline(threshold)
+    # plt.title('threshold')
+    # plt.show()
 
     anomaly_indices = np.where(reconstruction_error > threshold)[0]
 

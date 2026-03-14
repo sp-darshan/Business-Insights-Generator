@@ -95,6 +95,9 @@ def forecast_revenue(monthly_series, steps=3):
     last_value = monthly_series.iloc[-1]
     trend = "increasing" if future_forecast.iloc[-1] > last_value else "decreasing"
 
+    forecast_index = range(len(monthly_series), len(monthly_series) + steps)
+    test_forecast = model_fit.forecast(steps=len(test))
+
     return {
         "next_months_forecast": [float(x) for x in future_forecast],
         "trend": trend,
@@ -103,7 +106,8 @@ def forecast_revenue(monthly_series, steps=3):
             "mae": float(mae),
             "mape": float(mape)
         },
+        "test_prediction": [float(x) for x in test_forecast],
         "model_details": {
-            "order": (0, 1, 1)
+            "order": [0, 1, 1]
         }
     }

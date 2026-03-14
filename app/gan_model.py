@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import numpy as np
 from sklearn.preprocessing import MinMaxScaler
-
+import matplotlib.pyplot as plt
 
 # -----------------------
 # Generator
@@ -48,7 +48,7 @@ class Discriminator(nn.Module):
 # -----------------------
 # GAN Training Function
 # -----------------------
-def generate_synthetic_data(monthly_series, num_samples=6):
+def generate_synthetic_data(monthly_series, num_samples=6, track_history=False):
 
     values = monthly_series.values.reshape(-1, 1)
 
@@ -68,6 +68,10 @@ def generate_synthetic_data(monthly_series, num_samples=6):
 
     epochs = 800
     batch_size = min(8, len(real_data))
+    
+    # Loss tracking
+    g_losses = []
+    d_losses = []
 
     for epoch in range(epochs):
 
@@ -108,6 +112,10 @@ def generate_synthetic_data(monthly_series, num_samples=6):
         g_loss = criterion(outputs, real_labels)
         g_loss.backward()
         g_optimizer.step()
+        
+        # Track losses
+        g_losses.append(g_loss.item())
+        d_losses.append(d_loss.item())
 
     # -------------------
     # Generate Samples
@@ -141,7 +149,31 @@ def generate_synthetic_data(monthly_series, num_samples=6):
         synthetic = np.concatenate([synthetic.flatten(), extra])
 
     synthetic = synthetic[:num_samples]
+    
+    # Plot real and synthetic data
+    plt.hist(real_data)
+    plt.title('Real Data')
+    plt.show()
+    plt.hist(synthetic)
+    plt.title('Synthetic data')
+    plt.show()
+    
+    # Plot training losses
+    plt.figure(figsize=(10, 6))
+    plt.plot(g_losses, label='Generator Loss', linewidth=2)
+    plt.plot(d_losses, label='Discriminator Loss', linewidth=2)
+    plt.xlabel('Epoch')
+    plt.ylabel('Loss')
+    plt.title('GAN Training: Generator vs Discriminator Loss')
+    plt.legend()
+    plt.grid(True, alpha=0.3)
+    plt.tight_layout()
+    plt.show()
 
     return {
-        "synthetic_revenue_samples": [float(x) for x in synthetic]
+        "synthetic_revenue_samples": [float(x) for x in synthetic],
+        "training_history": {
+            "generator_losses": g_losses,
+            "discriminator_losses": d_losses
+        }
     }
